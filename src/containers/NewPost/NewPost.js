@@ -6,7 +6,8 @@ class NewPost extends Component {
     state = {
         title: '',
         content: '',
-        author: ''
+        author: '',
+        submitted: false
     }
 
     postDtataHandeler = () => {
@@ -19,7 +20,7 @@ class NewPost extends Component {
 
        axios.post('/posts', post)
        .then(response => {
-           console.log(response);
+           this.props.history.replace('/posts');
        })
        .catch(error => {
            console.error(error);

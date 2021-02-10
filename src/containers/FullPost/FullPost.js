@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from 'axios';
 import './FullPost.css';
 
@@ -8,10 +9,22 @@ class FullPost extends Component {
         loadedPost:null,
     }
 
+    componentDidMount(){
+    
+        this.loadData();
+
+    }
+
     componentDidUpdate(){
-        if(this.props.id){
-            if(!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)){
-                axios.get(`/posts/${this.props.id}`)
+       
+        this.loadData();
+
+    }
+
+    loadData(){
+        if(this.props.match.params.postId){
+            if(!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== + this.props.match.params.postId)){
+                axios.get(`/posts/${this.props.match.params.postId}`)
                 .then(response => {
                     this.setState({loadedPost: response.data})
                 })
@@ -20,7 +33,7 @@ class FullPost extends Component {
     }
 
     deletePostHandeler = () => {
-        axios.delete(`/posts/${this.props.id}`)
+        axios.delete(`/posts/${this.props.match.params.postId}`)
         .then(response => {
             console.log(response);
         })
@@ -35,10 +48,10 @@ class FullPost extends Component {
         <p style={{textAlign:'center'}}>
             Please select a Post!
         </p>;
-       if(this.props.id){
-           post = <p style={{textAlign:'center'}}>
-                     Loading...
-                </p>;
+       if(this.props.match.params.postId){
+           post = <div style={{textAlign:'center'}}>
+                   <Spinner />
+                </div>;
        }
        if(this.state.loadedPost){
             post = (
